@@ -1,0 +1,77 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    MONGODB NOT INSTALLED - INSTALL NOW                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+MONGODB IS NOT INSTALLED ON YOUR SYSTEM
+═══════════════════════════════════════════════════════════════════════════════
+
+FASTEST SOLUTION: DOWNLOAD & INSTALL (5 MINUTES)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. DOWNLOAD MONGODB:
+   https://www.mongodb.com/try/download/community
+
+2. SELECT:
+   - Version: 7.0.x (Current)
+   - Platform: Windows x64
+   - Package: MSI
+
+3. INSTALL:
+   - Run the downloaded .msi file
+   - Choose "Complete" installation
+   - ✅ Install MongoDB as a Service
+   - ✅ Run service as Network Service user
+   - Install MongoDB Compass: Optional (can uncheck)
+   - Click Install
+
+4. AFTER INSTALLATION:
+   MongoDB will start automatically as Windows service
+
+═══════════════════════════════════════════════════════════════════════════════
+
+ALTERNATIVE: MONGODB ATLAS (CLOUD - NO INSTALL NEEDED)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Go to: https://www.mongodb.com/cloud/atlas/register
+
+2. Sign up (free, no credit card required)
+
+3. Create FREE M0 cluster (512MB storage)
+
+4. Create database user:
+   - Username: admin
+   - Password: admin123
+
+5. Network Access:
+   - Add IP Address → Allow Access from Anywhere (0.0.0.0/0)
+
+6. Get connection string:
+   - Database → Connect → Connect your application
+   - Copy connection string (looks like):
+     mongodb+srv://admin:admin123@cluster0.xxxxx.mongodb.net/student_tracker
+
+7. I'll update your Spring Boot config with this connection string
+
+═══════════════════════════════════════════════════════════════════════════════
+
+WHICH OPTION DO YOU CHOOSE?
+
+A) Download & Install MongoDB Community (5 minutes)
+B) Use MongoDB Atlas Cloud (3 minutes, no install)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+AFTER MONGODB IS READY, RUN:
+═══════════════════════════════════════════════════════════════════════════════
+
+TERMINAL 1 - BACKEND:
+$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-17.0.15.6-hotspot"
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+cd d:\student-learning-tracker\student-tracker
+mvn clean spring-boot:run
+
+TERMINAL 2 - FRONTEND:
+cd d:\student-learning-tracker\frontend
+npm run dev
+
+═══════════════════════════════════════════════════════════════════════════════

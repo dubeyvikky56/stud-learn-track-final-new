@@ -1,0 +1,78 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    CHECK MONGODB STATUS - RUN ANYWHERE                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+RUN THESE COMMANDS IN ANY FOLDER (backend, frontend, or root):
+═══════════════════════════════════════════════════════════════════════════════
+
+METHOD 1: CHECK MONGODB SERVICE STATUS
+───────────────────────────────────────
+sc query MongoDB
+
+Expected output if running:
+STATE              : 4  RUNNING
+
+═══════════════════════════════════════════════════════════════════════════════
+
+METHOD 2: CHECK IF PORT 27017 IS LISTENING
+───────────────────────────────────────────
+netstat -an | findstr :27017
+
+Expected output if running:
+TCP    0.0.0.0:27017          0.0.0.0:0              LISTENING
+
+═══════════════════════════════════════════════════════════════════════════════
+
+METHOD 3: TEST CONNECTION (IF MONGO CLIENT IS INSTALLED)
+─────────────────────────────────────────────────────────
+mongo --eval "db.runCommand('ping')"
+
+OR (for newer versions):
+mongosh --eval "db.runCommand('ping')"
+
+Expected output if working:
+{ "ok" : 1 }
+
+═══════════════════════════════════════════════════════════════════════════════
+
+METHOD 4: CHECK PROCESSES
+─────────────────────────
+tasklist | findstr mongo
+
+Expected output if running:
+mongod.exe                   XXXX Services                   0     XX,XXX K
+
+═══════════════════════════════════════════════════════════════════════════════
+
+IF MONGODB IS NOT RUNNING:
+═══════════════════════════════════════════════════════════════════════════════
+
+START MONGODB SERVICE:
+net start MongoDB
+
+OR INSTALL MONGODB:
+Download: https://www.mongodb.com/try/download/community
+
+═══════════════════════════════════════════════════════════════════════════════
+
+QUICK TEST SCRIPT:
+═══════════════════════════════════════════════════════════════════════════════
+
+Copy and paste this in PowerShell (any folder):
+
+Write-Host "Checking MongoDB status..." -ForegroundColor Yellow
+$service = Get-Service -Name MongoDB -ErrorAction SilentlyContinue
+if ($service) {
+    Write-Host "MongoDB Service: $($service.Status)" -ForegroundColor Green
+} else {
+    Write-Host "MongoDB Service: NOT INSTALLED" -ForegroundColor Red
+}
+
+$port = netstat -an | findstr :27017
+if ($port) {
+    Write-Host "Port 27017: LISTENING" -ForegroundColor Green
+} else {
+    Write-Host "Port 27017: NOT LISTENING" -ForegroundColor Red
+}
+
+═══════════════════════════════════════════════════════════════════════════════

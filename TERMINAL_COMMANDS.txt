@@ -1,0 +1,133 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                   STUDENT LEARNING TRACKER - QUICK START                     ║
+║                         Spring Boot + React + MongoDB                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📋 PREREQUISITES:
+   ✓ Java 17+
+   ✓ Maven
+   ✓ Node.js
+   ✓ MongoDB
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔴 TERMINAL 1 - BACKEND (Spring Boot)
+═══════════════════════════════════════════════════════════════════════════════
+
+cd d:\student-learning-tracker\student-tracker
+mvn spring-boot:run
+
+⏳ Wait for: "Started StudentTrackerApplication in X.XXX seconds"
+✅ Backend running on: http://localhost:8080
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔵 TERMINAL 2 - FRONTEND (React + Vite)
+═══════════════════════════════════════════════════════════════════════════════
+
+cd d:\student-learning-tracker\frontend
+npm run dev
+
+⏳ Wait for: "Local: http://localhost:5173/"
+✅ Frontend running on: http://localhost:5173
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🌐 OPEN BROWSER
+═══════════════════════════════════════════════════════════════════════════════
+
+http://localhost:5173
+
+═══════════════════════════════════════════════════════════════════════════════
+
+👤 CREATE ACCOUNTS
+═══════════════════════════════════════════════════════════════════════════════
+
+ADMIN ACCOUNT:
+   Name: Admin User
+   Email: admin@college.edu
+   Password: admin123
+   Role: ADMIN
+
+STUDENT ACCOUNT:
+   Name: John Doe
+   Email: student@college.edu
+   Password: student123
+   Role: STUDENT
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 FEATURES
+═══════════════════════════════════════════════════════════════════════════════
+
+ADMIN DASHBOARD:
+   ✓ Add/Manage Students
+   ✓ Create Courses
+   ✓ Create Assessments (Quiz, Assignment, Exam, Project)
+   ✓ Upload Student Marks
+   ✓ View Analytics & Performance Metrics
+   ✓ Generate Reports
+
+STUDENT DASHBOARD:
+   ✓ View Enrolled Courses
+   ✓ Check Marks & Results
+   ✓ Track Academic Progress
+   ✓ View Performance Charts
+   ✓ Identify Weak Subjects
+   ✓ Download Performance Reports
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🛠️ TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+MongoDB not running?
+   → net start MongoDB
+   OR
+   → docker run -d -p 27017:27017 --name mongodb mongo:latest
+
+Port 8080 in use?
+   → netstat -ano | findstr :8080
+   → taskkill /PID <PID> /F
+
+Port 5173 in use?
+   → netstat -ano | findstr :5173
+   → taskkill /PID <PID> /F
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📚 PROJECT STRUCTURE
+═══════════════════════════════════════════════════════════════════════════════
+
+student-learning-tracker/
+├── student-tracker/          ← Spring Boot Backend
+│   ├── src/main/java/com/tracker/
+│   │   ├── config/          ← Security & Configuration
+│   │   ├── controller/      ← REST Controllers
+│   │   ├── dto/             ← Data Transfer Objects
+│   │   ├── model/           ← MongoDB Entities
+│   │   ├── repository/      ← Data Access Layer
+│   │   ├── security/        ← JWT Authentication
+│   │   └── service/         ← Business Logic
+│   └── pom.xml
+│
+├── frontend/                 ← React Frontend
+│   ├── src/
+│   │   ├── components/      ← UI Components
+│   │   ├── pages/           ← Page Components
+│   │   ├── services/        ← API Services
+│   │   └── hooks/           ← Custom Hooks
+│   └── package.json
+│
+└── START_HERE.md            ← Detailed Instructions
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎓 READY FOR YOUR COLLEGE PROJECT!
+═══════════════════════════════════════════════════════════════════════════════
+
+Backend:  http://localhost:8080
+Frontend: http://localhost:5173
+Database: mongodb://localhost:27017/student_tracker
+
+═══════════════════════════════════════════════════════════════════════════════

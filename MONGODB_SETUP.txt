@@ -1,0 +1,59 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    MONGODB NOT FOUND - INSTALLATION OPTIONS                  ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+OPTION 1: INSTALL MONGODB COMMUNITY SERVER (RECOMMENDED)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Download MongoDB Community Server:
+   https://www.mongodb.com/try/download/community
+
+2. Install with default settings
+
+3. MongoDB will run automatically as a Windows service
+
+4. Then run the backend
+
+═══════════════════════════════════════════════════════════════════════════════
+
+OPTION 2: USE MONGODB ATLAS (FREE CLOUD DATABASE)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Go to: https://www.mongodb.com/cloud/atlas/register
+
+2. Create free account and cluster
+
+3. Get connection string (looks like):
+   mongodb+srv://username:password@cluster.mongodb.net/student_tracker
+
+4. Update application.properties:
+   spring.data.mongodb.uri=YOUR_CONNECTION_STRING
+
+═══════════════════════════════════════════════════════════════════════════════
+
+OPTION 3: USE EMBEDDED MONGODB (FOR TESTING ONLY)
+═══════════════════════════════════════════════════════════════════════════════
+
+I can configure embedded MongoDB for quick testing.
+This runs MongoDB in-memory (data is lost on restart).
+
+Reply "YES" if you want this option.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+OPTION 4: INSTALL DOCKER DESKTOP
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Download Docker Desktop:
+   https://www.docker.com/products/docker-desktop
+
+2. Install and restart computer
+
+3. Run: docker run -d -p 27017:27017 --name student-tracker-mongo mongo:latest
+
+═══════════════════════════════════════════════════════════════════════════════
+
+QUICKEST SOLUTION: OPTION 3 (Embedded MongoDB)
+Let me know if you want me to set this up!
+
+═══════════════════════════════════════════════════════════════════════════════

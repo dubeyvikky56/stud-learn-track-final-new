@@ -1,0 +1,61 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    CHOOSE YOUR MONGODB SOLUTION                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+OPTION 1: DOWNLOAD MONGODB COMMUNITY (5 MINUTES)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Download: https://www.mongodb.com/try/download/community
+   - Version: 7.0.x
+   - Platform: Windows
+   - Package: MSI
+
+2. Run installer → Install as Windows Service → Complete
+
+3. MongoDB will start automatically
+
+4. Run backend command
+
+═══════════════════════════════════════════════════════════════════════════════
+
+OPTION 2: MONGODB ATLAS FREE CLOUD (3 MINUTES - NO INSTALL)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Go to: https://www.mongodb.com/cloud/atlas/register
+
+2. Create free account → Create M0 FREE cluster
+
+3. Create user: admin / admin123
+
+4. Allow IP: 0.0.0.0/0 (Allow from anywhere)
+
+5. Get connection string and tell me - I'll update config
+
+═══════════════════════════════════════════════════════════════════════════════
+
+OPTION 3: USE EXISTING NODE.JS BACKEND (IMMEDIATE)
+═══════════════════════════════════════════════════════════════════════════════
+
+Your Node.js backend already works! Let's use it temporarily:
+
+TERMINAL 1:
+cd d:\student-learning-tracker\backend
+npm start
+
+TERMINAL 2:
+cd d:\student-learning-tracker\frontend  
+npm run dev
+
+Open: http://localhost:5173
+
+(We can switch to Spring Boot later after MongoDB is set up)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+WHICH OPTION DO YOU PREFER?
+
+1 = Download MongoDB Community
+2 = Use MongoDB Atlas (cloud)
+3 = Use Node.js backend for now
+
+═══════════════════════════════════════════════════════════════════════════════

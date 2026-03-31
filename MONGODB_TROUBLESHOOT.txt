@@ -1,0 +1,56 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    MONGODB SERVICE NOT FOUND - TROUBLESHOOTING               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+RUN THESE COMMANDS TO FIND MONGODB:
+═══════════════════════════════════════════════════════════════════════════════
+
+1. CHECK ALL MONGODB SERVICES:
+───────────────────────────────
+Get-Service | Where-Object {$_.Name -like "*mongo*"}
+
+2. CHECK IF MONGODB PROCESS IS RUNNING:
+──────────────────────────────────────
+tasklist | findstr mongo
+
+3. CHECK IF PORT 27017 IS LISTENING:
+───────────────────────────────────
+netstat -an | findstr :27017
+
+4. CHECK MONGODB INSTALLATION:
+─────────────────────────────
+dir "C:\Program Files\MongoDB"
+
+5. TRY DIFFERENT SERVICE NAMES:
+──────────────────────────────
+sc query "MongoDB"
+sc query "MongoDBService"  
+sc query "Mongo"
+
+═══════════════════════════════════════════════════════════════════════════════
+
+IF MONGODB IS NOT RUNNING AS SERVICE:
+═══════════════════════════════════════════════════════════════════════════════
+
+START MONGODB MANUALLY:
+──────────────────────
+cd "C:\Program Files\MongoDB\Server\7.0\bin"
+mongod --dbpath "C:\data\db"
+
+(Keep this terminal open - MongoDB will run here)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+QUICK FIX - RUN ALL THESE COMMANDS:
+═══════════════════════════════════════════════════════════════════════════════
+
+Get-Service | Where-Object {$_.Name -like "*mongo*"}
+tasklist | findstr mongo
+netstat -an | findstr :27017
+dir "C:\Program Files\MongoDB"
+
+═══════════════════════════════════════════════════════════════════════════════
+
+COPY AND PASTE THE OUTPUT OF THESE COMMANDS!
+
+═══════════════════════════════════════════════════════════════════════════════

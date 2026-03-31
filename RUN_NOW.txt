@@ -1,0 +1,30 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         FIXED - RUN THIS IN POWERSHELL                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+🔴 TERMINAL 1 - BACKEND (Copy ALL lines together):
+═══════════════════════════════════════════════════════════════════════════════
+
+$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-17.0.15.6-hotspot"
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+cd d:\student-learning-tracker\student-tracker
+mvn clean spring-boot:run
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔵 TERMINAL 2 - FRONTEND:
+═══════════════════════════════════════════════════════════════════════════════
+
+cd d:\student-learning-tracker\frontend
+npm run dev
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ WHAT WAS FIXED:
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Renamed user.java → User.java (Java is case-sensitive)
+2. Added "mvn clean" to ensure fresh build
+3. Set JAVA_HOME properly for PowerShell
+
+═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,49 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║              ✅ EMBEDDED MONGODB CONFIGURED - READY TO RUN!                  ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+MongoDB will now start automatically with your Spring Boot app!
+No separate MongoDB installation needed for testing.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔴 TERMINAL 1 - BACKEND (Copy all lines):
+═══════════════════════════════════════════════════════════════════════════════
+
+$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-17.0.15.6-hotspot"
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+cd d:\student-learning-tracker\student-tracker
+mvn spring-boot:run
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔵 TERMINAL 2 - FRONTEND:
+═══════════════════════════════════════════════════════════════════════════════
+
+cd d:\student-learning-tracker\frontend
+npm run dev
+
+═══════════════════════════════════════════════════════════════════════════════
+
+⏳ WAIT FOR:
+═══════════════════════════════════════════════════════════════════════════════
+
+Backend:  "Started StudentTrackerApplication in X.XXX seconds"
+Frontend: "Local: http://localhost:5173/"
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🌐 THEN OPEN: http://localhost:5173
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ WHAT'S CONFIGURED:
+- Embedded MongoDB (starts automatically)
+- Spring Boot Backend (Port 8080)
+- React Frontend (Port 5173)
+- JWT Authentication
+- All APIs ready
+
+⚠️ NOTE: Data is stored in-memory and will be lost when you stop the server.
+For production, install MongoDB Community Server.
+
+═══════════════════════════════════════════════════════════════════════════════
