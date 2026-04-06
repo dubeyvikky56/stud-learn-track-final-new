@@ -1,146 +1,134 @@
-# Complete Setup & Run Guide
+# 🚀 Quick Start Guide - EduTrack
 
-## ⚠️ IMPORTANT: Run These Commands in Your Cursor Terminal
+## Start the Application
 
-### Step 1: Start MongoDB
-If MongoDB is not running, start it:
+### Terminal 1 - Backend
 ```bash
-# If MongoDB is installed as a service
-net start MongoDB
-
-# OR if you have MongoDB installed locally
-mongod --dbpath "C:\data\db"
-
-# OR if using Docker
-docker run -d -p 27017:27017 --name mongodb mongo:latest
+cd d:\student-learning-tracker\student-tracker
+mvn clean spring-boot:run
 ```
+Wait for: `Started StudentTrackerApplication in X seconds`
 
-### Step 2: Open TWO Terminals in Cursor
-
----
-
-## 🔴 TERMINAL 1 - Spring Boot Backend
-
+### Terminal 2 - Frontend
 ```bash
-cd student-tracker
-mvn spring-boot:run
-```
-
-**Wait for this message:**
-```
-Started StudentTrackerApplication in X.XXX seconds
-```
-
-Backend will be running on: **http://localhost:8080**
-
----
-
-## 🔵 TERMINAL 2 - React Frontend
-
-```bash
-cd frontend
+cd d:\student-learning-tracker\frontend
 npm run dev
 ```
+Open: http://localhost:5173
 
-**You should see:**
-```
-VITE v8.x.x  ready in XXX ms
+## Test Authentication
 
-➜  Local:   http://localhost:5173/
-```
+### 1️⃣ Quick Test with Demo Accounts
 
-Frontend will be running on: **http://localhost:5173**
+**Login Page**: http://localhost:5173/login
+
+**Admin Demo**:
+- Click "👨💼 Admin Demo" button
+- Click "Sign In"
+- Should redirect to Admin Dashboard
+
+**Student Demo**:
+- Click "🎓 Student Demo" button
+- Click "Sign In"
+- Should redirect to Student Dashboard
+
+### 2️⃣ Test Registration
+
+**Register Page**: http://localhost:5173/register
+
+**Create Student Account**:
+1. Select "🎓 Student" account type
+2. Fill in:
+   - Name: Your Name
+   - Email: your@email.com
+   - Roll Number: CS2024001
+   - Semester: 1
+   - Department: Computer Science
+   - Password: test123
+   - Confirm Password: test123
+3. Click "Create Account"
+4. Should redirect to Student Dashboard
+
+**Create Admin Account**:
+1. Select "👨💼 Educator" account type
+2. Fill in:
+   - Name: Your Name
+   - Email: admin@email.com
+   - Department: Computer Science
+   - Password: admin123
+   - Confirm Password: admin123
+3. Click "Create Account"
+4. Should redirect to Admin Dashboard
+
+### 3️⃣ Test Logout
+
+1. Click "Logout" button in sidebar
+2. Should see success message
+3. Should redirect to login page
+
+## Features Overview
+
+### 🎓 Student Portal
+- **Dashboard**: View your stats and recent results
+- **My Courses**: See enrolled courses
+- **My Results**: Check assessment results
+- **Progress**: Track your academic progress
+
+### 👨💼 Admin Panel
+- **Dashboard**: System overview and statistics
+- **Students**: Manage student records
+- **Courses**: Create and manage courses
+- **Assessments**: Create assessments
+- **Results**: Enter and manage results
+- **Reports**: Generate performance reports
+
+## Common Issues & Solutions
+
+### ❌ "Cannot deserialize value" error
+**Solution**: Already fixed! Role values are now uppercase.
+
+### ❌ Login/Register not working
+**Solutions**:
+1. Check if backend is running on port 8080
+2. Check if PostgreSQL is running on port 5433
+3. Clear browser localStorage: `localStorage.clear()`
+4. Check browser console for errors
+
+### ❌ Redirecting to wrong dashboard
+**Solution**: Clear localStorage and login again
+
+### ❌ Logout not working
+**Solution**: Already fixed! Logout button now properly clears session.
+
+## Database Info
+
+- **Host**: localhost
+- **Port**: 5433
+- **Database**: student_tracker
+- **Username**: postgres
+- **Password**: kotaiit567
+
+## API Base URL
+
+- **Backend**: http://localhost:8080/api
+- **Frontend**: http://localhost:5173
+
+## Modern Design Features
+
+✨ **Glassmorphism UI** - Modern glass-like cards
+🎨 **Purple-Blue Gradient** - Consistent color theme
+🌙 **Dark Mode** - Professional dark theme
+⚡ **Smooth Animations** - Floating elements and transitions
+📱 **Responsive Design** - Works on all screen sizes
+🔐 **Secure Authentication** - JWT-based auth with role-based access
+
+## Need Help?
+
+Check these files:
+- `AUTH_FIX_SUMMARY.md` - Detailed authentication fix documentation
+- `BACKEND_REFERENCE.md` - Backend configuration and troubleshooting
+- `README.md` - Project overview and setup
 
 ---
 
-## ✅ Access Your Application
-
-Open your browser and go to: **http://localhost:5173**
-
-### First Time Setup:
-1. Click "Register" 
-2. Create an Admin account (select role: ADMIN)
-3. Login with your credentials
-4. Start adding students, courses, and assessments!
-
----
-
-## 🎯 Quick Test
-
-### Register Admin:
-```json
-POST http://localhost:8080/api/auth/register
-{
-  "name": "Admin User",
-  "email": "admin@test.com",
-  "password": "admin123",
-  "role": "ADMIN"
-}
-```
-
-### Register Student:
-```json
-POST http://localhost:8080/api/auth/register
-{
-  "name": "John Doe",
-  "email": "student@test.com",
-  "password": "student123",
-  "role": "STUDENT"
-}
-```
-
----
-
-## 🛠️ Troubleshooting
-
-### MongoDB Connection Error
-- Make sure MongoDB is running on port 27017
-- Check connection string in `student-tracker/src/main/resources/application.properties`
-
-### Port 8080 Already in Use
-```bash
-# Find and kill the process
-netstat -ano | findstr :8080
-taskkill /PID <PID_NUMBER> /F
-```
-
-### Port 5173 Already in Use
-```bash
-# Find and kill the process
-netstat -ano | findstr :5173
-taskkill /PID <PID_NUMBER> /F
-```
-
-### Maven Build Fails
-```bash
-cd student-tracker
-mvn clean install -U
-```
-
-### Frontend Dependencies Missing
-```bash
-cd frontend
-npm install
-```
-
----
-
-## 📝 Project Structure
-
-```
-student-learning-tracker/
-├── student-tracker/          # Spring Boot Backend (Port 8080)
-│   ├── src/main/java/
-│   └── pom.xml
-├── frontend/                 # React Frontend (Port 5173)
-│   ├── src/
-│   └── package.json
-├── start.bat                 # Windows startup script
-└── RUN_INSTRUCTIONS.md       # This file
-```
-
----
-
-## 🚀 Ready to Go!
-
-Your complete full-stack application is ready. Just run the two commands in separate terminals and start using your Student Learning Tracker!
+**Everything is now working! Enjoy your modern EduTrack application!** 🎉

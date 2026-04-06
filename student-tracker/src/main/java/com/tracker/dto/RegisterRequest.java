@@ -18,5 +18,10 @@ public class RegisterRequest {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
     
-    private User.Role role = User.Role.STUDENT;
+    private User.UserRole role = User.UserRole.STUDENT;
+    
+    // Student-specific fields (optional)
+    private String rollNumber;
+    private String department;
+    private Integer semester;
 }

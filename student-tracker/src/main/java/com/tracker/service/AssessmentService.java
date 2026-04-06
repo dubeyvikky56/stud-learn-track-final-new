@@ -10,22 +10,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AssessmentService {
     private final AssessmentRepository assessmentRepository;
-    
+
     public List<Assessment> getAllAssessments() {
         return assessmentRepository.findAll();
     }
-    
-    public Assessment getAssessmentById(String id) {
+
+    public Assessment getAssessmentById(Long id) {
         return assessmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Assessment not found"));
     }
-    
+
     public Assessment createAssessment(Assessment assessment) {
-        assessment.setAssessmentId("ASM" + System.currentTimeMillis());
         return assessmentRepository.save(assessment);
-    }
-    
-    public List<Assessment> getAssessmentsByCourse(String courseId) {
-        return assessmentRepository.findByCourseId(courseId);
     }
 }

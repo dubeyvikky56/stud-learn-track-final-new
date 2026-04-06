@@ -1,35 +1,22 @@
 package com.tracker.service;
 
-import com.tracker.model.*;
-import com.tracker.repository.*;
+import com.tracker.repository.ResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class ReportService {
     private final ResultRepository resultRepository;
-    private final StudentRepository studentRepository;
-    private final AssessmentRepository assessmentRepository;
-    
-    public Map<String, Object> getPerformanceReport(String studentId) {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
-        
-        List<Result> results = resultRepository.findByStudentId(studentId);
-        
-        double avgPercentage = results.stream()
-                .mapToDouble(Result::getPercentage)
-                .average()
-                .orElse(0.0);
-        
+
+    public Map<String, Object> getPerformanceReport(Long studentId) {
         Map<String, Object> report = new HashMap<>();
-        report.put("student", student);
-        report.put("results", results);
+        BigDecimal avgPercentage = resultRepository.getAveragePercentageByStudent(studentId).orElse(BigDecimal.ZERO);
         report.put("averagePercentage", avgPercentage);
-        report.put("totalAssessments", results.size());
-        
+        report.put("results", resultRepository.findByStudentId(studentId));
         return report;
     }
 }

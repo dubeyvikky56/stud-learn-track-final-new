@@ -3,6 +3,7 @@ import { TrendingUp, Award, BookOpen, Target, ChevronRight } from 'lucide-react'
 import { resultAPI, courseAPI } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const StudentDashboard = () => {
   const [data, setData] = useState({
@@ -21,8 +22,9 @@ const StudentDashboard = () => {
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        // For now, we'll create mock data since we don't have student-specific endpoints yet
-        // In a real implementation, you'd fetch actual student data
+        setLoading(true);
+        
+        // Create initial mock data
         const mockData = {
           avgPercentage: 78.5,
           totalAssessments: 12,
@@ -36,22 +38,39 @@ const StudentDashboard = () => {
         // Try to fetch actual courses
         try {
           const coursesRes = await courseAPI.getAll();
-          mockData.courses = coursesRes.data?.slice(0, 4) || [];
-          mockData.enrolledCourses = mockData.courses.length;
+          if (coursesRes.data && coursesRes.data.length > 0) {
+            mockData.courses = coursesRes.data.slice(0, 4);
+            mockData.enrolledCourses = mockData.courses.length;
+            toast.success('Courses loaded successfully!');
+          }
         } catch (err) {
           console.log('Could not fetch courses:', err);
+          toast.error('Could not load courses data');
+        }
+        
+        // Try to fetch student results if we have user info
+        if (user?.email) {
+          try {
+            // This would need a proper student ID lookup
+            // For now, we'll use mock data
+            console.log('User data:', user);
+          } catch (err) {
+            console.log('Could not fetch results:', err);
+          }
         }
         
         setData(mockData);
+        
       } catch (err) {
         console.error('Error fetching student data:', err);
+        toast.error('Failed to load dashboard data');
       } finally {
         setLoading(false);
       }
     };
 
     fetchStudentData();
-  }, []);
+  }, [user]);
 
   if (loading) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#03000a', flexDirection: 'column', gap: '16px' }}>

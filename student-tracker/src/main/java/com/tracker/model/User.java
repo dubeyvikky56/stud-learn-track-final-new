@@ -1,37 +1,64 @@
 package com.tracker.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-import jakarta.validation.constraints.*;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "users")
 @Data
-@Document(collection = "users")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
+    
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     
-    @NotBlank(message = "Name is required")
-    @Size(max = 50, message = "Name cannot exceed 50 characters")
-    private String name;
-    
+    @Column(unique = true, nullable = false)
+    @Email(message = "Please provide a valid email address")
     @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
-    @Indexed(unique = true)
     private String email;
     
+    @Column(nullable = false)
     @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must be at least 6 characters")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
     
-    @NotNull
-    private Role role = Role.STUDENT;
+    @Column(nullable = false)
+    @NotBlank(message = "Name is required")
+    @Size(max = 255, message = "Name must not exceed 255 characters")
+    private String name;
     
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private UserRole role = UserRole.STUDENT;
     
-    public enum Role {
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+    
+    public enum UserRole {
         ADMIN, STUDENT
+    }
+    
+    // Constructor for creating new users
+    public User(String email, String password, String name, UserRole role) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.role = role;
     }
 }

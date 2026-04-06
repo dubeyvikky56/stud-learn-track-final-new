@@ -1,54 +1,44 @@
 version: '3.8'
 
 services:
-  # MongoDB Database
-  mongodb:
-    image: mongo:6.0
-    container_name: student_tracker_db
+  postgres:
+    image: postgres:15-alpine
+    container_name: student_tracker_postgres
     restart: unless-stopped
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin123
-      MONGO_INITDB_DATABASE: student_learning_tracker
+      POSTGRES_DB: student_tracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: kotaiit567
     ports:
-      - "27017:27017"
+      - "5433:5432"
     volumes:
-      - mongodb_data:/data/db
-      - ./backend/config/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - postgres_data:/var/lib/postgresql/data
+      - ./database-setup.sql:/docker-entrypoint-initdb.d/1-setup.sql:ro
+      - ./fix_passwords.sql:/docker-entrypoint-initdb.d/2-fix.sql:ro
     networks:
       - student_tracker_network
 
-  # Backend API
   backend:
     build: 
-      context: ./backend
+      context: ./student-tracker
       dockerfile: Dockerfile
     container_name: student_tracker_backend
     restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      PORT: 5000
-      MONGODB_URI: mongodb://admin:admin123@mongodb:27017/student_learning_tracker?authSource=admin
-      JWT_SECRET: your_jwt_secret_key_here_change_in_production
-      JWT_EXPIRES_IN: 7d
-      FRONTEND_URL: http://localhost:3000
     ports:
-      - "5000:5000"
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/student_tracker
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: kotaiit567
+      JWT_SECRET: mySecretKey123456789012345678901234567890
+      SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - mongodb
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
+      - postgres
     networks:
       - student_tracker_network
 
-  # Frontend
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        VITE_API_URL: http://localhost:5000/api
+    build: ./frontend
     container_name: student_tracker_frontend
     restart: unless-stopped
     ports:
@@ -59,8 +49,9 @@ services:
       - student_tracker_network
 
 volumes:
-  mongodb_data:
+  postgres_data:
 
 networks:
   student_tracker_network:
     driver: bridge
+

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Users, BookOpen, FileText, TrendingUp, AlertTriangle, Award, BarChart3, Activity } from 'lucide-react';
 import { studentAPI, courseAPI, assessmentAPI, resultAPI } from '../../services/api';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -20,17 +21,43 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [studentsRes, coursesRes, assessmentsRes, resultsRes] = await Promise.all([
-          studentAPI.getAll(),
-          courseAPI.getAll(),
-          assessmentAPI.getAll(),
-          resultAPI.getAll()
-        ]);
-
-        const students = studentsRes.data || [];
-        const courses = coursesRes.data || [];
-        const assessments = assessmentsRes.data || [];
-        const results = resultsRes.data || [];
+        setLoading(true);
+        setError('');
+        
+        // Initialize with default values
+        let students = [], courses = [], assessments = [], results = [];
+        
+        try {
+          const studentsRes = await studentAPI.getAll();
+          students = studentsRes.data || [];
+        } catch (err) {
+          console.log('Students API error:', err);
+          toast.error('Could not load students data');
+        }
+        
+        try {
+          const coursesRes = await courseAPI.getAll();
+          courses = coursesRes.data || [];
+        } catch (err) {
+          console.log('Courses API error:', err);
+          toast.error('Could not load courses data');
+        }
+        
+        try {
+          const assessmentsRes = await assessmentAPI.getAll();
+          assessments = assessmentsRes.data || [];
+        } catch (err) {
+          console.log('Assessments API error:', err);
+          toast.error('Could not load assessments data');
+        }
+        
+        try {
+          const resultsRes = await resultAPI.getAll();
+          results = resultsRes.data || [];
+        } catch (err) {
+          console.log('Results API error:', err);
+          toast.error('Could not load results data');
+        }
 
         // Calculate statistics
         const avgPercentage = results.length > 0 
@@ -60,9 +87,12 @@ const AdminDashboard = () => {
           gradeDistribution,
           recentResults: results.slice(-6).reverse()
         });
+        
+        toast.success('Dashboard data loaded successfully!');
       } catch (err) {
         setError('Failed to load dashboard data');
         console.error('Dashboard error:', err);
+        toast.error('Failed to load dashboard data');
       } finally {
         setLoading(false);
       }

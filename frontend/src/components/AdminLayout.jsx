@@ -1,91 +1,118 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, BookOpen, FileText, Award, LogOut, Menu, X, BarChart3, GraduationCap } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, FileText, Award, LogOut, Menu, X, BarChart3, GraduationCap, User } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 const AdminLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    toast.success('Logged out successfully');
+    navigate('/login');
+  };
 
   const navItems = [
-    { to: '/admin/dashboard', icon: LayoutDashboard, label: 'DASHBOARD', color: '#00f5ff' },
-    { to: '/admin/students', icon: Users, label: 'STUDENTS', color: '#ff006e' },
-    { to: '/admin/courses', icon: BookOpen, label: 'COURSES', color: '#8338ec' },
-    { to: '/admin/assessments', icon: FileText, label: 'ASSESSMENTS', color: '#ffbe0b' },
-    { to: '/admin/results', icon: Award, label: 'RESULTS', color: '#06ffa5' },
-    { to: '/admin/reports', icon: BarChart3, label: 'REPORTS', color: '#ff4d00' },
+    { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/admin/students', icon: Users, label: 'Students' },
+    { to: '/admin/courses', icon: BookOpen, label: 'Courses' },
+    { to: '/admin/assessments', icon: FileText, label: 'Assessments' },
+    { to: '/admin/results', icon: Award, label: 'Results' },
+    { to: '/admin/reports', icon: BarChart3, label: 'Reports' },
   ];
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#03000a', color: '#fff' }}>
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
-        @keyframes pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
-        .nav-item { transition: all 0.2s; }
-        .nav-item:hover { background: rgba(255,255,255,0.05) !important; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
       `}</style>
 
       {/* Sidebar */}
-      <div style={{ width: collapsed ? '68px' : '220px', background: 'rgba(0,0,0,0.6)', borderRight: '1px solid rgba(0,245,255,0.08)', display: 'flex', flexDirection: 'column', transition: 'width 0.3s ease', overflow: 'hidden', backdropFilter: 'blur(20px)', flexShrink: 0 }}>
+      <div className={`${collapsed ? 'w-20' : 'w-64'} bg-slate-900/50 backdrop-blur-xl border-r border-white/10 flex flex-col transition-all duration-300`}>
         {/* Logo */}
-        <div style={{ padding: '20px 16px', borderBottom: '1px solid rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '36px', height: '36px', border: '1px solid #00f5ff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,245,255,0.08)', flexShrink: 0, boxShadow: '0 0 15px rgba(0,245,255,0.3)' }}>
-            <GraduationCap size={18} color="#00f5ff" />
-          </div>
-          {!collapsed && (
-            <div>
-              <div style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: '13px', letterSpacing: '2px', whiteSpace: 'nowrap' }}>EDU<span style={{ color: '#00f5ff' }}>TRACK</span></div>
-              <div style={{ fontFamily: 'Share Tech Mono', fontSize: '8px', color: 'rgba(255,0,110,0.7)', letterSpacing: '1px' }}>ADMIN PANEL</div>
+        <div className="p-6 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/50">
+              <GraduationCap className="w-6 h-6 text-white" />
             </div>
-          )}
+            {!collapsed && (
+              <div>
+                <h1 className="text-white font-bold text-lg" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>EduTrack</h1>
+                <p className="text-xs text-purple-400">Admin Panel</p>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Nav */}
-        <nav style={{ flex: 1, padding: '12px 8px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          {navItems.map(({ to, icon: Icon, label, color }) => {
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-2">
+          {navItems.map(({ to, icon: Icon, label }) => {
             const active = location.pathname === to;
             return (
-              <Link key={to} to={to} className="nav-item" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 10px', borderRadius: '8px', textDecoration: 'none', background: active ? `${color}12` : 'transparent', border: active ? `1px solid ${color}25` : '1px solid transparent', position: 'relative', overflow: 'hidden' }}>
-                {active && <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '2px', background: color, boxShadow: `0 0 8px ${color}` }} />}
-                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon size={16} color={active ? color : 'rgba(255,255,255,0.35)'} />
-                </div>
-                {!collapsed && <span style={{ fontFamily: 'Share Tech Mono', fontSize: '11px', color: active ? color : 'rgba(255,255,255,0.35)', letterSpacing: '1.5px', whiteSpace: 'nowrap' }}>{label}</span>}
+              <Link
+                key={to}
+                to={to}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                  active
+                    ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-lg shadow-purple-500/50'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                {!collapsed && <span className="font-medium">{label}</span>}
               </Link>
             );
           })}
         </nav>
 
-        {/* User + Logout */}
-        <div style={{ padding: '12px 8px', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+        {/* User Section */}
+        <div className="p-4 border-t border-white/10">
           {!collapsed && (
-            <div style={{ padding: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', marginBottom: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ fontFamily: 'Rajdhani', fontWeight: 700, fontSize: '13px', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user?.name}</div>
-              <div style={{ fontFamily: 'Share Tech Mono', fontSize: '9px', color: 'rgba(255,0,110,0.7)', letterSpacing: '1px' }}>ADMINISTRATOR</div>
+            <div className="mb-3 p-3 bg-white/5 rounded-xl border border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <User className="w-5 h-5 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-semibold text-sm truncate">{user?.name}</p>
+                  <p className="text-xs text-purple-400 truncate">Administrator</p>
+                </div>
+              </div>
             </div>
           )}
-          <button onClick={logout} className="nav-item" style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', padding: '10px', borderRadius: '8px', background: 'transparent', border: '1px solid transparent', cursor: 'pointer', color: 'rgba(255,0,110,0.6)' }}>
-            <LogOut size={16} />
-            {!collapsed && <span style={{ fontFamily: 'Share Tech Mono', fontSize: '11px', letterSpacing: '1.5px' }}>LOGOUT</span>}
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all"
+          >
+            <LogOut className="w-5 h-5 flex-shrink-0" />
+            {!collapsed && <span className="font-medium">Logout</span>}
           </button>
         </div>
       </div>
 
-      {/* Main */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        {/* Top bar */}
-        <div style={{ height: '56px', borderBottom: '1px solid rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', padding: '0 24px', gap: '16px', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)' }}>
-          <button onClick={() => setCollapsed(!collapsed)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: '4px' }}>
-            {collapsed ? <Menu size={18} /> : <X size={18} />}
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Top Bar */}
+        <div className="h-16 bg-slate-900/30 backdrop-blur-xl border-b border-white/10 flex items-center px-6">
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+          >
+            {collapsed ? <Menu className="w-5 h-5" /> : <X className="w-5 h-5" />}
           </button>
-          <div style={{ flex: 1 }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#06ffa5', boxShadow: '0 0 8px #06ffa5', display: 'inline-block', animation: 'pulse 2s infinite' }} />
-            <span style={{ fontFamily: 'Share Tech Mono', fontSize: '10px', color: 'rgba(255,255,255,0.3)', letterSpacing: '2px' }}>SYSTEM ONLINE</span>
+          <div className="flex-1" />
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <span className="text-sm text-slate-400">System Online</span>
           </div>
         </div>
-        <div style={{ flex: 1, overflowY: 'auto' }}>
+
+        {/* Page Content */}
+        <div className="flex-1 overflow-y-auto">
           <Outlet />
         </div>
       </div>

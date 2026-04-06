@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, User, Hash, BookOpen, Layers, AlertCircle, UserPlus } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, User, Hash, BookOpen, Layers, AlertCircle, UserPlus, GraduationCap } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 
@@ -9,8 +9,8 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { register } = useAuth();
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,13 +22,23 @@ const RegisterPage = () => {
     if (formData.password !== formData.confirmPassword) return setError('Passwords do not match');
     if (formData.password.length < 6) return setError('Password must be at least 6 characters');
     setLoading(true);
+    
     try {
-      const result = await register(formData);
+      const result = await register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+        rollNumber: formData.rollNumber,
+        department: formData.department,
+        semester: formData.semester
+      });
+      
       toast.success('Account created successfully!');
-      navigate(result.role === 'admin' ? '/admin/dashboard' : '/student/dashboard');
+      navigate(result.role === 'ADMIN' ? '/admin/dashboard' : '/student/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
-      toast.error('Registration failed');
+      setError(err.message || 'Registration failed');
+      toast.error(err.message || 'Registration failed');
     } finally {
       setLoading(false);
     }
@@ -37,206 +47,136 @@ const RegisterPage = () => {
   const departments = ['Computer Science', 'Information Technology', 'Electronics', 'Mechanical', 'Civil', 'Chemical', 'MBA', 'MCA'];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#03000a', display: 'flex', color: '#fff', fontFamily: "'DM Sans', sans-serif", overflow: 'hidden' }}>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-6 relative overflow-hidden">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root { --cyan: #00f5ff; --pink: #ff006e; --green: #06ffa5; --yellow: #ffbe0b; }
-        @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,20px)} }
-        @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,30px)} }
-        @keyframes fadeSlideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes scanline { 0%{transform:translateY(-100%)} 100%{transform:translateY(100vh)} }
-        @keyframes pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
-        @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-        @keyframes borderRotate { from{background-position:0% 50%} to{background-position:200% 50%} }
-
-        .cyber-input {
-          width: 100%;
-          background: rgba(0,245,255,0.04);
-          border: 1px solid rgba(0,245,255,0.15);
-          border-radius: 6px;
-          padding: 12px 16px 12px 40px;
-          color: #fff;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 14px;
-          outline: none;
-          transition: all 0.3s;
-          clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
-        }
-        .cyber-input::placeholder { color: rgba(255,255,255,0.2); }
-        .cyber-input:focus { border-color: var(--cyan); background: rgba(0,245,255,0.07); box-shadow: 0 0 15px rgba(0,245,255,0.1); }
-
-        .cyber-select {
-          width: 100%;
-          background: rgba(0,245,255,0.04);
-          border: 1px solid rgba(0,245,255,0.15);
-          border-radius: 6px;
-          padding: 12px 16px 12px 40px;
-          color: #fff;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 14px;
-          outline: none;
-          transition: all 0.3s;
-          cursor: pointer;
-          appearance: none;
-          clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
-        }
-        .cyber-select:focus { border-color: var(--cyan); background: rgba(0,245,255,0.07); box-shadow: 0 0 15px rgba(0,245,255,0.1); }
-        .cyber-select option { background: #0a0a1a; color: #fff; }
-
-        .cyber-btn {
-          width: 100%;
-          background: linear-gradient(135deg, var(--cyan), #0099aa);
-          color: #000;
-          font-family: 'Orbitron', sans-serif;
-          font-weight: 700;
-          font-size: 12px;
-          letter-spacing: 2px;
-          padding: 15px;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          text-transform: uppercase;
-          clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-          transition: all 0.3s;
-          box-shadow: 0 0 20px rgba(0,245,255,0.4);
-          position: relative;
-          overflow: hidden;
-          display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .cyber-btn::after { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition:left 0.5s; }
-        .cyber-btn:hover::after { left: 100%; }
-        .cyber-btn:hover { box-shadow: 0 0 40px rgba(0,245,255,0.8); transform: translateY(-1px); }
-        .cyber-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-        .role-btn {
-          flex: 1;
-          background: transparent;
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 6px;
-          padding: 12px 8px;
-          color: rgba(255,255,255,0.4);
-          font-family: 'Share Tech Mono', monospace;
-          font-size: 11px;
-          letter-spacing: 1px;
-          cursor: pointer;
-          transition: all 0.3s;
-          text-transform: uppercase;
-          text-align: center;
-        }
-        .role-btn.active {
-          border-color: var(--cyan);
-          color: var(--cyan);
-          background: rgba(0,245,255,0.08);
-          box-shadow: 0 0 15px rgba(0,245,255,0.2);
-        }
-        .role-btn:hover:not(.active) { border-color: rgba(0,245,255,0.3); color: rgba(0,245,255,0.6); }
-
-        .field-label {
-          font-family: 'Share Tech Mono', monospace;
-          font-size: 10px;
-          color: rgba(0,245,255,0.5);
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          display: block;
-          margin-bottom: 6px;
-        }
-
-        .strength-bar { height: 3px; border-radius: 2px; transition: all 0.3s; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
 
-      {/* Scanline */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 100, pointerEvents: 'none', overflow: 'hidden', opacity: 0.03 }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '150px', background: 'linear-gradient(transparent, rgba(0,245,255,0.4), transparent)', animation: 'scanline 5s linear infinite' }} />
-      </div>
-      <div style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none', backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px)', opacity: 0.5 }} />
-
-      {/* Background glows */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-        <div style={{ position: 'absolute', top: '-20%', right: '-10%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,245,255,0.07), transparent 60%)', animation: 'float1 10s ease-in-out infinite' }} />
-        <div style={{ position: 'absolute', bottom: '-20%', left: '-10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,0,110,0.07), transparent 60%)', animation: 'float2 14s ease-in-out infinite' }} />
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(0,245,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.025) 1px, transparent 1px)', backgroundSize: '50px 50px' }} />
+      {/* Animated background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animation: 'float 8s ease-in-out infinite' }} />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{ animation: 'float 10s ease-in-out infinite', animationDelay: '2s' }} />
       </div>
 
-      {/* MAIN CONTENT */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px', position: 'relative', zIndex: 2 }}>
-        <div style={{ width: '100%', maxWidth: '520px', animation: 'fadeSlideUp 0.8s ease forwards' }}>
-
-          {/* Header */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '36px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                <div style={{ width: '36px', height: '36px', border: '1px solid var(--cyan)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 15px rgba(0,245,255,0.3)' }}>
-                  <span style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: '14px', color: 'var(--cyan)' }}>E</span>
-                </div>
-                <span style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: '16px', letterSpacing: '3px' }}>EDU<span style={{ color: 'var(--cyan)' }}>TRACK</span></span>
-              </div>
-              <div style={{ fontFamily: 'Share Tech Mono', fontSize: '10px', color: 'rgba(255,255,255,0.2)', letterSpacing: '2px' }}>
-                HAVE ACCOUNT?{' '}
-                <Link to="/login" style={{ color: 'var(--cyan)', textDecoration: 'none' }}>SIGN IN</Link>
-              </div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: '22px', letterSpacing: '2px' }}>CREATE<br /><span style={{ color: 'var(--cyan)' }}>ACCOUNT</span></div>
-            </div>
+      {/* Register Card */}
+      <div className="relative w-full max-w-2xl" style={{ animation: 'slideUp 0.6s ease-out' }}>
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl shadow-lg shadow-purple-500/50 mb-4">
+            <GraduationCap className="w-8 h-8 text-white" />
           </div>
+          <h1 className="text-3xl font-bold text-white mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            Create Account
+          </h1>
+          <p className="text-slate-400">Join EduTrack and start tracking your progress</p>
+        </div>
 
-          {/* Error */}
+        {/* Form Card */}
+        <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8">
           {error && (
-            <div style={{ background: 'rgba(255,0,110,0.08)', border: '1px solid rgba(255,0,110,0.25)', borderRadius: '6px', padding: '10px 14px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', color: '#ff6b9d', fontSize: '12px', fontFamily: 'Share Tech Mono', letterSpacing: '0.5px' }}>
-              <AlertCircle size={13} /> {error}
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-200">
+              <AlertCircle className="w-5 h-5 flex-shrink-0" />
+              <span className="text-sm">{error}</span>
             </div>
           )}
 
-          {/* Role selector */}
-          <div style={{ marginBottom: '20px' }}>
-            <label className="field-label">ACCOUNT TYPE</label>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button type="button" className={`role-btn ${formData.role === 'student' ? 'active' : ''}`} onClick={() => setFormData({ ...formData, role: 'student' })}>
-                👤 STUDENT
+          {/* Role Selector */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-slate-300 mb-3">Account Type</label>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, role: 'student' })}
+                className={`py-3 px-4 rounded-xl font-medium transition-all ${
+                  formData.role === 'student'
+                    ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-lg shadow-purple-500/50'
+                    : 'bg-white/5 text-slate-300 hover:bg-white/10 border border-white/10'
+                }`}
+              >
+                🎓 Student
               </button>
-              <button type="button" className={`role-btn ${formData.role === 'admin' ? 'active' : ''}`} onClick={() => setFormData({ ...formData, role: 'admin' })}>
-                ⚡ EDUCATOR
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, role: 'admin' })}
+                className={`py-3 px-4 rounded-xl font-medium transition-all ${
+                  formData.role === 'admin'
+                    ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-lg shadow-purple-500/50'
+                    : 'bg-white/5 text-slate-300 hover:bg-white/10 border border-white/10'
+                }`}
+              >
+                👨💼 Educator
               </button>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            {/* Name + Email row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Name & Email */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="field-label">FULL NAME</label>
-                <div style={{ position: 'relative' }}>
-                  <User size={14} color="rgba(0,245,255,0.4)" style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                  <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" className="cyber-input" required />
+                <label className="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="John Doe"
+                    className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                    required
+                  />
                 </div>
               </div>
               <div>
-                <label className="field-label">EMAIL</label>
-                <div style={{ position: 'relative' }}>
-                  <Mail size={14} color="rgba(0,245,255,0.4)" style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@edu.com" className="cyber-input" required />
+                <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="you@example.com"
+                    className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                    required
+                  />
                 </div>
               </div>
             </div>
 
-            {/* Student fields */}
+            {/* Student Fields */}
             {formData.role === 'student' && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="field-label">ROLL NUMBER</label>
-                  <div style={{ position: 'relative' }}>
-                    <Hash size={14} color="rgba(0,245,255,0.4)" style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                    <input type="text" name="rollNumber" value={formData.rollNumber} onChange={handleChange} placeholder="CS2021001" className="cyber-input" />
+                  <label className="block text-sm font-medium text-slate-300 mb-2">Roll Number</label>
+                  <div className="relative">
+                    <Hash className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input
+                      type="text"
+                      name="rollNumber"
+                      value={formData.rollNumber}
+                      onChange={handleChange}
+                      placeholder="CS2021001"
+                      className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                    />
                   </div>
                 </div>
                 <div>
-                  <label className="field-label">SEMESTER</label>
-                  <div style={{ position: 'relative' }}>
-                    <Layers size={14} color="rgba(0,245,255,0.4)" style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                    <select name="semester" value={formData.semester} onChange={handleChange} className="cyber-select">
-                      <option value="">Select Sem</option>
-                      {[1,2,3,4,5,6,7,8].map(s => <option key={s} value={s}>Semester {s}</option>)}
+                  <label className="block text-sm font-medium text-slate-300 mb-2">Semester</label>
+                  <div className="relative">
+                    <Layers className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <select
+                      name="semester"
+                      value={formData.semester}
+                      onChange={handleChange}
+                      className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="" className="bg-slate-800">Select Semester</option>
+                      {[1,2,3,4,5,6,7,8].map(s => <option key={s} value={s} className="bg-slate-800">Semester {s}</option>)}
                     </select>
                   </div>
                 </div>
@@ -244,45 +184,80 @@ const RegisterPage = () => {
             )}
 
             {/* Department */}
-            <div style={{ marginBottom: '14px' }}>
-              <label className="field-label">DEPARTMENT</label>
-              <div style={{ position: 'relative' }}>
-                <BookOpen size={14} color="rgba(0,245,255,0.4)" style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                <select name="department" value={formData.department} onChange={handleChange} className="cyber-select">
-                  <option value="">Select Department</option>
-                  {departments.map(d => <option key={d} value={d}>{d}</option>)}
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Department</label>
+              <div className="relative">
+                <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <select
+                  name="department"
+                  value={formData.department}
+                  onChange={handleChange}
+                  className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all appearance-none cursor-pointer"
+                >
+                  <option value="" className="bg-slate-800">Select Department</option>
+                  {departments.map(d => <option key={d} value={d} className="bg-slate-800">{d}</option>)}
                 </select>
               </div>
             </div>
 
-            {/* Password row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '24px' }}>
+            {/* Password Fields */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="field-label">PASSWORD</label>
-                <div style={{ position: 'relative' }}>
-                  <Lock size={14} color="rgba(0,245,255,0.4)" style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                  <input type={showPassword ? 'text' : 'password'} name="password" value={formData.password} onChange={handleChange} placeholder="Min 6 chars" className="cyber-input" style={{ paddingRight: '36px' }} required />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', padding: 0 }}>
-                    {showPassword ? <EyeOff size={13} /> : <Eye size={13} />}
+                <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Min 6 characters"
+                    className="w-full pl-12 pr-12 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
-                {/* Password strength */}
                 {formData.password && (
-                  <div style={{ marginTop: '6px', display: 'flex', gap: '4px' }}>
+                  <div className="mt-2 flex gap-1">
                     {[1,2,3,4].map(i => (
-                      <div key={i} className="strength-bar" style={{ flex: 1, background: formData.password.length >= i * 3 ? (formData.password.length >= 10 ? 'var(--green)' : formData.password.length >= 6 ? 'var(--yellow)' : 'var(--pink)') : 'rgba(255,255,255,0.1)' }} />
+                      <div
+                        key={i}
+                        className={`h-1 flex-1 rounded-full transition-all ${
+                          formData.password.length >= i * 3
+                            ? formData.password.length >= 10 ? 'bg-green-500' : formData.password.length >= 6 ? 'bg-yellow-500' : 'bg-red-500'
+                            : 'bg-white/10'
+                        }`}
+                      />
                     ))}
                   </div>
                 )}
               </div>
               <div>
-                <label className="field-label">CONFIRM PASSWORD</label>
-                <div style={{ position: 'relative' }}>
-                  <Lock size={14} color="rgba(0,245,255,0.4)" style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                  <input type={showPassword ? 'text' : 'password'} name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} placeholder="Repeat password" className="cyber-input" required />
+                <label className="block text-sm font-medium text-slate-300 mb-2">Confirm Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Repeat password"
+                    className="w-full pl-12 pr-12 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                    required
+                  />
                   {formData.confirmPassword && (
-                    <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '12px' }}>
-                      {formData.password === formData.confirmPassword ? '✅' : '❌'}
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                      {formData.password === formData.confirmPassword ? (
+                        <span className="text-green-500">✓</span>
+                      ) : (
+                        <span className="text-red-500">✗</span>
+                      )}
                     </div>
                   )}
                 </div>
@@ -290,20 +265,39 @@ const RegisterPage = () => {
             </div>
 
             {/* Submit */}
-            <button type="submit" className="cyber-btn" disabled={loading}>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-gradient-to-r from-purple-500 to-blue-600 text-white font-semibold rounded-xl shadow-lg shadow-purple-500/50 hover:shadow-purple-500/70 hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
               {loading ? (
-                <><span style={{ width: '13px', height: '13px', border: '2px solid rgba(0,0,0,0.3)', borderTop: '2px solid #000', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} /> CREATING ACCOUNT...</>
+                <>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" style={{ animation: 'spin 0.8s linear infinite' }} />
+                  Creating account...
+                </>
               ) : (
-                <><UserPlus size={14} /> CREATE ACCOUNT</>
+                <>
+                  <UserPlus className="w-5 h-5" />
+                  Create Account
+                </>
               )}
             </button>
           </form>
 
-          {/* Footer */}
-          <div style={{ textAlign: 'center', marginTop: '20px', fontFamily: 'Share Tech Mono', fontSize: '10px', color: 'rgba(255,255,255,0.2)', letterSpacing: '1px' }}>
-            ALREADY REGISTERED?{' '}
-            <Link to="/login" style={{ color: 'var(--cyan)', textDecoration: 'none' }}>ACCESS SYSTEM</Link>
+          {/* Login Link */}
+          <div className="mt-6 text-center text-sm text-slate-400">
+            Already have an account?{' '}
+            <Link to="/login" className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">
+              Sign in
+            </Link>
           </div>
+        </div>
+
+        {/* Back to Home */}
+        <div className="mt-6 text-center">
+          <Link to="/" className="text-sm text-slate-400 hover:text-white transition-colors inline-flex items-center gap-2">
+            ← Back to Home
+          </Link>
         </div>
       </div>
     </div>

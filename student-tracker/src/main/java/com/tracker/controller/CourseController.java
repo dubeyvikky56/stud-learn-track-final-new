@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/courses")
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class CourseController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable String id) {
+    public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
         return ResponseEntity.ok(courseService.getCourseById(id));
     }
     

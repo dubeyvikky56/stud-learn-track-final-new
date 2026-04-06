@@ -13,6 +13,8 @@ const StudentManagement = () => {
   const [enrollModal, setEnrollModal] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [saving, setSaving] = useState(false);
+  const [newStudent, setNewStudent] = useState({ name: '', email: '', password: '', rollNumber: '', department: '', semester: '' });
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -71,6 +73,25 @@ const StudentManagement = () => {
     }
   };
 
+  const handleAddStudent = async (e) => {
+    e.preventDefault();
+    if (!newStudent.name || !newStudent.email || !newStudent.password || !newStudent.rollNumber || !newStudent.department || !newStudent.semester) {
+      return toast.error('All fields are required');
+    }
+    setSaving(true);
+    try {
+      await studentAPI.createAdminStudent(newStudent);
+      toast.success('New student created!');
+      setShowAddModal(false);
+      setNewStudent({ name: '', email: '', password: '', rollNumber: '', department: '', semester: '' });
+      fetchData();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to create student');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const filtered = students.filter(s =>
     s.name?.toLowerCase().includes(search.toLowerCase()) ||
     s.email?.toLowerCase().includes(search.toLowerCase()) ||
@@ -98,6 +119,10 @@ const StudentManagement = () => {
           <h1 style={styles.pageTitle}>STUDENT <span style={{ color: '#00f5ff' }}>REGISTRY</span></h1>
           <div style={{ fontFamily: 'Share Tech Mono', fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '4px' }}>{students.length} REGISTERED STUDENTS</div>
         </div>
+        <button onClick={() => setShowAddModal(true)} style={styles.addBtn}>
+          <Plus size={20} />
+          ADD NEW STUDENT
+        </button>
       </div>
 
       {/* Search */}
@@ -238,6 +263,97 @@ const StudentManagement = () => {
           </div>
         </div>
       )}
+
+      {/* Add New Student Modal */}
+      {showAddModal && (
+        <div style={styles.overlay}>
+          <div style={styles.modal}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: '18px', letterSpacing: '2px', color: '#06ffa5' }}>ADD NEW STUDENT</div>
+              <button onClick={() => setShowAddModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)' }}><X size={18} /></button>
+            </div>
+            <form onSubmit={handleAddStudent}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                <div>
+                  <label style={styles.label}>FULL NAME</label>
+                  <input
+                    type="text"
+                    value={newStudent.name}
+                    onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })}
+                    placeholder="John Doe"
+                    style={styles.input}
+                    required
+                  />
+                </div>
+                <div>
+                  <label style={styles.label}>EMAIL</label>
+                  <input
+                    type="email"
+                    value={newStudent.email}
+                    onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })}
+                    placeholder="john@example.com"
+                    style={styles.input}
+                    required
+                  />
+                </div>
+                <div>
+                  <label style={styles.label}>PASSWORD</label>
+                  <input
+                    type="password"
+                    value={newStudent.password}
+                    onChange={(e) => setNewStudent({ ...newStudent, password: e.target.value })}
+                    placeholder="Secure password"
+                    style={styles.input}
+                    required
+                  />
+                </div>
+                <div>
+                  <label style={styles.label}>ROLL NUMBER</label>
+                  <input
+                    type="text"
+                    value={newStudent.rollNumber}
+                    onChange={(e) => setNewStudent({ ...newStudent, rollNumber: e.target.value })}
+                    placeholder="CSE2024001"
+                    style={styles.input}
+                    required
+                  />
+                </div>
+                <div>
+                  <label style={styles.label}>DEPARTMENT</label>
+                  <input
+                    type="text"
+                    value={newStudent.department}
+                    onChange={(e) => setNewStudent({ ...newStudent, department: e.target.value })}
+                    placeholder="Computer Science"
+                    style={styles.input}
+                    required
+                  />
+                </div>
+                <div>
+                  <label style={styles.label}>SEMESTER</label>
+                  <select
+                    value={newStudent.semester}
+                    onChange={(e) => setNewStudent({ ...newStudent, semester: e.target.value })}
+                    style={styles.input}
+                    required
+                  >
+                    <option value="">Select Semester</option>
+                    {[1,2,3,4,5,6,7,8].map(s => <option key={s} value={s}>Semester {s}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+                <button type="submit" disabled={saving} style={styles.cyberBtn('#06ffa5')}>
+                  <Plus size={13} /> {saving ? 'CREATING...' : 'CREATE STUDENT'}
+                </button>
+                <button type="button" onClick={() => setShowAddModal(false)} style={styles.cyberBtn('rgba(255,255,255,0.3)')}>
+                  CANCEL
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -257,8 +373,29 @@ const baseStyles = `
   .table-row:hover { background: rgba(0,245,255,0.03) !important; }
 `;
 
-const styles = {
+  const styles = {
   container: { padding: '32px', background: '#03000a', minHeight: '100vh', color: '#fff' },
+  addBtn: {
+    background: 'linear-gradient(135deg, #06ffa5, #00cc88)',
+    border: 'none',
+    borderRadius: '12px',
+    padding: '12px 24px',
+    color: '#000',
+    fontFamily: 'Orbitron',
+    fontWeight: 700,
+    fontSize: '13px',
+    letterSpacing: '1px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    boxShadow: '0 4px 20px rgba(6,255,165,0.3)',
+    transition: 'all 0.3s ease',
+    ':hover': {
+      transform: 'translateY(-2px)',
+      boxShadow: '0 8px 30px rgba(6,255,165,0.4)'
+    }
+  },
   sectionLabel: { fontFamily: 'Share Tech Mono', fontSize: '11px', color: 'rgba(0,245,255,0.5)', letterSpacing: '3px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' },
   dot: { width: '6px', height: '6px', borderRadius: '50%', background: '#00f5ff', boxShadow: '0 0 8px #00f5ff', display: 'inline-block' },
   pageTitle: { fontFamily: 'Orbitron', fontWeight: 900, fontSize: '28px', letterSpacing: '3px', color: '#fff' },

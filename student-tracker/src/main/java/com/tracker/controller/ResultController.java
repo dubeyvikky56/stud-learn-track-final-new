@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/results")
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class ResultController {
     }
     
     @GetMapping("/student/{studentId}")
-    public ResponseEntity<List<Result>> getResultsByStudent(@PathVariable String studentId) {
-        return ResponseEntity.ok(resultService.getResultsByStudent(studentId));
+    public ResponseEntity<List<Result>> getResultsByStudent(@PathVariable Long studentId) {
+        return ResponseEntity.ok(resultService.getResultsByStudentId(studentId));
     }
 }

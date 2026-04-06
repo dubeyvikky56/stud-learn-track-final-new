@@ -10,18 +10,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
-    
+
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
-    
-    public Course getCourseById(String id) {
+
+    public Course getCourseById(Long id) {
         return courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
     }
-    
+
     public Course createCourse(Course course) {
-        course.setCourseId("CSE" + System.currentTimeMillis());
         return courseRepository.save(course);
     }
 }
