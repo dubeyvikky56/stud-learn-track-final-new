@@ -1,13 +1,17 @@
-# TODO: Add Student Registration to Admin Panel
+# GitHub Cleanup TODO
 
-## Steps:
-1. ✅ Created TODO.md
-2. ✅ Added AdminStudentRequest DTO
-3. ✅ Updated StudentService.java: Added createStudentFromAdminRequest (User+Student)
-4. ✅ Updated StudentController.java: POST /api/students/register
-5. ✅ api.js: createAdminStudent added
-6. ✅ StudentManagement.jsx: ADD NEW STUDENT button + full modal
-7. ✅ Fixed compilation + model constructors/setters
-8. ✅ Feature ready - test as admin!
+## Completed Steps from Plan
+- [x] Rename branch to main
+- [x] Push main to GitHub  
+- [x] Delete blackboxai/fix-api-port-cors branch
 
-Backend compiles/runs. Login/register works. Admin add student complete.
+## Next Steps
+- Set 'main' as default branch on GitHub (visit repo Settings > Branches > Set default)
+
+## Remaining Steps
+- [ ] Set 'main' as default branch on GitHub (Settings > Branches)
+- [ ] Clean root node_modules, package.json, query, run-auth-fix.bat, DB files
+  - git rm -r --cached node_modules package-lock.json package.json query run-auth-fix.bat student-tracker/data/
+  - git commit -m \"Remove unnecessary root files/DB\"
+  - git push
+
