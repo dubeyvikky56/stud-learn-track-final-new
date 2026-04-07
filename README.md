@@ -19,7 +19,7 @@ d:/student-learning-tracker/
 
 ### 1. Prerequisites
 - **Java 17+** + **Maven 3.6+**
-- **Node.js 18+** + **npm/yarn**
+- **Node.js 18+** + **npm/yarn** (for frontend only)
 - **PostgreSQL 15+** (local or Docker)
 
 ### 2. Setup PostgreSQL Database

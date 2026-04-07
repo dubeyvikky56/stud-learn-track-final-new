@@ -12,6 +12,7 @@ Wait for: `Started StudentTrackerApplication in X seconds`
 ### Terminal 2 - Frontend
 ```bash
 cd d:\student-learning-tracker\frontend
+npm install  # if needed
 npm run dev
 ```
 Open: http://localhost:5173

@@ -1,17 +1,11 @@
-# GitHub Cleanup TODO
+# Node.js Backend Removal TODO
 
-## Completed Steps from Plan
-- [x] Rename branch to main
-- [x] Push main to GitHub  
-- [x] Delete blackboxai/fix-api-port-cors branch
+## Plan Breakdown:
+1. ✅ Delete root Node.js artifacts: package.json, package-lock.json, node_modules/
+2. ✅ Read and update scripts: check-setup.bat, start-all.bat, start.bat, run-backend.bat/ps1, run-frontend.bat ^(already good^)
+3. ✅ Updated key documentation: README.md, QUICK_START.md ^(minor Node clarification^); no backend Node refs in MDs
+4. ✅ .gitignore good ^(frontend node_modules ignored^)
+5. ✅ docker-compose.yml verified: Postgres + Spring backend + frontend only
+6. ✅ Tested: check-setup.bat runs clean ^(no backend Node/Mongo refs^); start-all.bat ready ^(Spring + Frontend^)
 
-## Next Steps
-- Set 'main' as default branch on GitHub (visit repo Settings > Branches > Set default)
-
-## Remaining Steps
-- [ ] Set 'main' as default branch on GitHub (Settings > Branches)
-- [ ] Clean root node_modules, package.json, query, run-auth-fix.bat, DB files
-  - git rm -r --cached node_modules package-lock.json package.json query run-auth-fix.bat student-tracker/data/
-  - git commit -m \"Remove unnecessary root files/DB\"
-  - git push
-
+7. ✅ Task complete - Node.js backend removed!
