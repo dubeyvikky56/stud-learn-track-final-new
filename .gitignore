@@ -1,39 +1,47 @@
-# Backend (Spring Boot)
+# Backend
 student-tracker/target/
 student-tracker/.mvn/
 student-tracker/mvnw
 student-tracker/mvnw.cmd
+student-tracker/HELP.md
 student-tracker/.idea/
 student-tracker/*.iml
-student-tracker/.settings/
-student-tracker/.classpath
-student-tracker/.project
+student-tracker/*.iws
+student-tracker/*.ipr
+student-tracker/data/
 
-# Frontend (React)
+# Frontend
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
 frontend/.env.local
-frontend/.env.production
-
-# IDE
-.vscode/
-.idea/
-*.iml
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
 
 # Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
 
-# Environment variables
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
 .env
 .env.local
-.env.production
+
+# Database
+*.db
+*.sqlite
+*.h2.db
