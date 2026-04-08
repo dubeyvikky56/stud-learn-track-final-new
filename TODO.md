@@ -1,11 +1,1 @@
-# Node.js Backend Removal TODO
-
-## Plan Breakdown:
-1. ✅ Delete root Node.js artifacts: package.json, package-lock.json, node_modules/
-2. ✅ Read and update scripts: check-setup.bat, start-all.bat, start.bat, run-backend.bat/ps1, run-frontend.bat ^(already good^)
-3. ✅ Updated key documentation: README.md, QUICK_START.md ^(minor Node clarification^); no backend Node refs in MDs
-4. ✅ .gitignore good ^(frontend node_modules ignored^)
-5. ✅ docker-compose.yml verified: Postgres + Spring backend + frontend only
-6. ✅ Tested: check-setup.bat runs clean ^(no backend Node/Mongo refs^); start-all.bat ready ^(Spring + Frontend^)
-
-7. ✅ Task complete - Node.js backend removed!
+# Task: Fix Backend Directory Name (Revert to student-tracker)\n\n## Steps:\n- [ ] Step 1: Rename directory backend/ → student-tracker/ (blocked: close VSCode tabs in backend/)\n- [x] Step 2: Update docker-compose.yml build context (already correct)\n- [ ] Step 3: Test backend build\n- [ ] Step 4: Test docker-compose\n- [ ] Step 5: Mark complete\n\nStatus: docker-compose ready. Close tabs & confirm to retry rename.
