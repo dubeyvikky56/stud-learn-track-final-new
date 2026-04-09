@@ -6,10 +6,12 @@ import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 
 const LoginPage = () => {
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [step, setStep] = useState('credentials'); // 'credentials' | 'otp'
+  const [formData, setFormData] = useState({ email: '', password: '', otp: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [userInfo, setUserInfo] = useState(null);
   const { login } = useAuth();
   const navigate = useNavigate();
 

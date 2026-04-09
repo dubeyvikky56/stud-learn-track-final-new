@@ -53,6 +53,7 @@ api.interceptors.response.use(
 export const authAPI = {
   register: (data) => api.post('/auth/register', data),
   login: (data) => api.post('/auth/login', data),
+  verifyOtp: (data) => api.post('/auth/login', data),  // Reuse /login with otp field
 };
 
 // Students

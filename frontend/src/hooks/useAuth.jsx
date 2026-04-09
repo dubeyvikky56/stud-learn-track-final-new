@@ -25,33 +25,46 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // 🔥 LOGIN (FIXED)
-  const login = async (email, password) => {
+  // 🔥 LOGIN with OTP only (no password)
+  const login = async (email, otp = '', role = 'STUDENT') => {
     try {
-      const res = await authAPI.login({ email, password });
+      const payload = { email };
+      if (otp) {
+        payload.otp = otp;
+      }
+      if (role) {
+        payload.role = role;
+      }
+      
+      console.log('Sending login request:', payload);
+      const res = await authAPI.login(payload);
 
-      console.log("LOGIN RESPONSE:", res.data); // debug
+      console.log("LOGIN RESPONSE:", res.data);
 
-      const { token, name, role, email: userEmail } = res.data;
+      const { partial, token, name, role: userRole, email: userEmail } = res.data;
 
-      if (!token) throw new Error("Token not received from server");
+      if (partial) {
+        throw { message: 'OTP_REQUIRED', data: { email: userEmail, name, role: userRole } };
+      }
 
-      // ✅ Save token
+      if (!token) throw new Error("Token not received");
+
+      // Save to localStorage
       localStorage.setItem('token', token);
-
-      // ✅ Save user
-      const userData = { email: userEmail, name, role };
+      const userData = { email: userEmail, name, role: userRole };
       localStorage.setItem('user', JSON.stringify(userData));
-
+      
+      console.log('User data saved to localStorage:', userData);
+      console.log('User role:', userRole);
+      
       setUser(userData);
 
-      // 🔥 IMPORTANT (refresh so interceptor picks token)
-      window.location.reload();
-
       return userData;
-
     } catch (error) {
       console.error('Login error:', error);
+      if (error.message === 'OTP_REQUIRED') {
+        throw error;
+      }
       throw error.response?.data?.message || error.message || 'Login failed';
     }
   };
